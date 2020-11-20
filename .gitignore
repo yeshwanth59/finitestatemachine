@@ -1,0 +1,13 @@
+**/*.iml
+**/.idea
+**/target
+**/dependency-reduced-pom.xml
+**/logs
+**/*.log
+**/*.env
+**/python-env
+
+__pycache__/
+**/*.pyc
+
+
