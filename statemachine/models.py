@@ -26,6 +26,13 @@ class Option(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
 
+class User(models.Model):
+    name = models.CharField(max_length=41)
+    mobileNo = models.CharField(max_length=10)
+    email = models.EmailField(max_length=20)
+    pwd = models.CharField(max_length=10)
+
+
 class UserStateMapping(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
