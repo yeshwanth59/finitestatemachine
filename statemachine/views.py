@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from statemachine.models import User
+from statemachine.models import User, Workflow
 from statemachine.forms import SignupForm, LoginForm
 
 # Create your views here.
+
+
+def home(request):
+    workflow = Workflow.objects.all()
+    return render(request, "home.html", {"workflow": workflow})
 
 
 def signup(request):
@@ -26,7 +31,7 @@ def login(request):
             pw = MyLoginForm.cleaned_data["pwd"]
             print(un)
             print(pw)
-            dbuser = Student.objects.filter(email=un, pwd=pw)
+            dbuser = User.objects.filter(email=un, pwd=pw)
 
             if not dbuser:
                 return HttpResponse("Login Failed")
@@ -44,3 +49,8 @@ def login(request):
 def logout(request):
     request.session.clear()
     return redirect("/")
+
+
+def workflowStart(request, workflow_id):
+    return render(request, "questions.html")
+

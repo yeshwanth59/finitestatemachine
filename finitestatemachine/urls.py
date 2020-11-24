@@ -25,5 +25,8 @@ urlpatterns = [
     path("signup/", views.signup),
     path("login/", views.login),
     path("logout/", views.logout),
+    path("<int:workflow_id>/start", views.workflowStart),
+    path("", views.home),
+
 
 ]

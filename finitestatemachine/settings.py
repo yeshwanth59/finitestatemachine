@@ -82,7 +82,7 @@ DATABASES = {
         'PORT': '5432',
         'NAME': 'statemachine',
         'USER': 'postgres',
-        'PASSWORD': ''
+        'PASSWORD': 'postgres',
     }
 }
 
