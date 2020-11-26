@@ -11,51 +11,74 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
             crossorigin="anonymous"></script>
+
+
     {% load static %}
     <link rel="stylesheet" href="{% static '/css/semantic.min.css' %}">
-
-
+    <link rel="stylesheet" href="{% static '/css/all.min.css' %}">
 
 
     <style>
         body{
-        background: url("https://images.unsplash.com/photo-1493119508027-2b584f234d6c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80");
+        background: url("https://images.unsplash.com/photo-1523800503107-5bc3ba2a6f81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80");
         background-repeat: no-repeat;
         background-size: 100%;
         }
+
+
     </style>
 </head>
-<body >
+<body>
+<form action="">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/" style="color:white;"><h2>My Health</h2></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-    <a class="navbar-brand" href="/">My Office</a>
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-       <li class="nav-item active">
-        <a class="nav-link" href="/signup/">SignUp Here<span class="sr-only">(current)</span></a>
-      </li> <li class="nav-item active">
-        <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
-      </li>
-    </ul>
-      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
-      </li>
-          </ui>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-  </div>
-</nav>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                   <h3> <a class="nav-link" href="/"> Home <span class="sr-only">(current)</span></a></h3>
+                </li>
 
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                {% if request.session.user %}
+                <a style="color:teal;"><h2> Hello, </h2> <a style="color:yellow;"><h2> {{request.session.user.name}} </h2>
+                </a> </a>
+
+                <li class="nav-item active">
+                    <h3><a class="nav-link" href="/profile">Profile <i class="fas fa-info-circle"></i></a></h3>
+                </li>
+
+
+                <li class="nav-item active">
+                   <h3> <a class="nav-link" href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a></h3>
+                </li>
+                {% else %}
+                <li class="nav-item active">
+                   <h3> <a class="nav-link" href="/login">Login <i class="fas fa-sign-in-alt"></i></a></h3>
+                </li>
+                <li class="nav-item active">
+                    <h3><a class="nav-link" href="/signup">SignUp <i class="fas fa-user-plus"></i></a></h3>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </nav>
+</form>
 {% block content %}
 
 
 {% endblock %}
+
+{% load static %}
+
+<script src="{% static '/js/all.min.js' %}"> </script>
 
 </body>
 </html>
