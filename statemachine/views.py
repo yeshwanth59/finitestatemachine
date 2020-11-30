@@ -1,14 +1,21 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.http import HttpResponse
+from django.views import View
 from statemachine.models import User, Workflow, State, Question, Option
 from statemachine.forms import SignupForm, LoginForm
+from os import path
 import json
+
 # Create your views here.
 
 
-def home(request):
+def office(request):
     workflow = Workflow.objects.all()
-    return render(request, "home.html", {"workflow": workflow})
+    return render(request, "office.html", {"workflow": workflow})
+
+
+def home(request):
+    return render(request, "home.html")
 
 
 def signup(request):
@@ -23,8 +30,14 @@ def signup(request):
     return render(request, "signup.html", {"form": form})
 
 
-def login(request):
-    if request.method == "POST":
+class Login(View):
+    return_url = None
+
+    def get(self, request):
+        Login.return_url = request.GET.get('return_url')
+        return render(request, "login.html")
+
+    def post(self, request):
         MyLoginForm = LoginForm(request.POST)
         if MyLoginForm.is_valid():
             un = MyLoginForm.cleaned_data["email"]
@@ -38,18 +51,18 @@ def login(request):
                 temp['name'] = user.name
                 request.session['user'] = temp
                 print(user.__dict__)
+                if Login.return_url:
+                    return HttpResponseRedirect(Login.return_url)
+                return redirect("/signup")
 
             if not dbuser:
                 return HttpResponse("Login Failed")
+
             else:
-                return redirect("/")
+                return redirect("/office")
         else:
             form = LoginForm()
         return render(request, "login.html", {"form": form})
-
-    else:
-        form = LoginForm()
-    return render(request, "login.html", {"form": form})
 
 
 def logout(request):

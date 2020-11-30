@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+<ul>
+    {% block content %}
+    {% if workflow %}
+    {% for wrkfl in workflow %}
+    <h1><li> <a href="{{ wrkfl.id }}/start"> {{ wrkfl }} </a> </li></h1>
+    {% endfor %}
+    {% endif %}
+    {% endblock %}
+</ul>

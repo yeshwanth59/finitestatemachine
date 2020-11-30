@@ -20,16 +20,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from statemachine import views
+from statemachine.views import Login
 from statemachine.middlewares.cant_login_after_login import cantLoginAfterLogin
+from statemachine.middlewares.login_req_middleware import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^_nested_admin/', include('nested_admin.urls')),
     path("signup/", cantLoginAfterLogin(views.signup)),
-    path("login/", cantLoginAfterLogin(views.login)),
+    path("login/", cantLoginAfterLogin(Login.as_view())),
     path("logout/", views.logout),
-    path("<int:workflow_id>/start", views.workflow_start),
-    path("<int:workflow_id>/submit", views.workflow_submit),
+    path("office/", views.office),
+    path("office/<int:workflow_id>/start", login_required(views.workflow_start)),
+    path("office/<int:workflow_id>/submit", login_required(views.workflow_submit)),
     path("", views.home),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
