@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.http import HttpResponse
 from django.views import View
-from statemachine.models import User, Workflow, State, Question, Option
+from statemachine.models import User, Workflow, State, Question, Option, UserState
 from statemachine.forms import SignupForm, LoginForm
 from os import path
 import json
+
 
 # Create your views here.
 
@@ -49,6 +50,7 @@ class Login(View):
             if pw:
                 temp = {}
                 temp['name'] = user.name
+                temp['id'] = user.id
                 request.session['user'] = temp
                 print(user.__dict__)
                 if Login.return_url:
@@ -70,10 +72,32 @@ def logout(request):
     return redirect("/")
 
 
+# def workflow_start(request, workflow_id):
+#     user = request.session.get("user")
+#     user_state = User.objects.get(user_id=user.id).first()
+#     if user_state:
+#         state = user_state.save()
+#     else:
+#         state = State.objects.filter(workflow_id=workflow_id).filter(initial_state=True).first()
+#
+#     if state:
+#         populate_state(state)
+#
+#     return render(request, "questions.html", {"state": state})
+
+
 def workflow_start(request, workflow_id):
-    state = State.objects.filter(workflow_id=workflow_id).filter(initial_state=True).first()
-    if state:
-        populate_state(state)
+    user = request.session.get("user")
+    print(user)
+    user_state_obj = UserState.objects.filter(workflow_id=workflow_id).filter(user_id=user.get("id")).order_by('-id').first()
+    if user_state_obj:
+        state = user_state_obj.state
+        print(state)
+    else:
+        state = State.objects.filter(workflow_id=workflow_id).filter(initial_state=True).first()
+        UserState(state=state, workflow_id=workflow_id,user_id=user.get("id")).save()
+
+    populate_state(state)
 
     return render(request, "questions.html", {"state": state})
 
@@ -87,6 +111,7 @@ def populate_state(state):
 
 
 def workflow_submit(request, workflow_id):
+    user = request.session.get("user")
     print(request.POST)
     user_response = request.POST.get('response')
     state_id = request.POST.get('state_id')
@@ -97,6 +122,7 @@ def workflow_submit(request, workflow_id):
     for s in state.next_states.all():
 
         if s.validate(user_response):
+            UserState(state=s, workflow_id=workflow_id, user_id=user.get("id")).save()
             populate_state(s)
             next_state = s
             break

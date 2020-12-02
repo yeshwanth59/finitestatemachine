@@ -4,14 +4,20 @@ from os import path
 
 def login_required(get_response):
 
-    def middleware(request, workflow_id=None):
+    def middleware(request, workflow_id=None, user_id=None):
 
         print("Middleware...///")
         user = request.session.get("user")
+        print(user)
         if user:
             response = None
             if workflow_id:
                 response = get_response(request, workflow_id)
+                # if user_id:
+                #     state = get_response(request, user_id=user.id)
+                #     print(state)
+                # else:
+                #     state = get_response(request)
             else:
                 response = get_response(request)
             return response

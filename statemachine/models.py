@@ -52,6 +52,12 @@ class User(models.Model):
     pwd = models.CharField(max_length=10)
 
 
+class UserState(models.Model):
+    user_id = models.PositiveIntegerField()
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    workflow_id = models.PositiveIntegerField()
+
+
 class UserStateMapping(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
