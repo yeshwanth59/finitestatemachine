@@ -110,6 +110,18 @@ def populate_state(state):
     setattr(state, 'question_set', questions)
 
 
+def previous(request, state_id):
+    user = request.session.get("user")
+    user_state_obj = UserState.objects.filter(state_id=state_id).filter(user_id=user.get("id")).first()
+    pre_state_id = user_state_obj.pre_state_id
+    state = State.objects.filter(id=pre_state_id).first()
+
+    populate_state(state)
+
+    return render(request, "questions.html", {"state": state})
+
+
+
 def workflow_submit(request, workflow_id):
     user = request.session.get("user")
     print(request.POST)
@@ -122,7 +134,7 @@ def workflow_submit(request, workflow_id):
     for s in state.next_states.all():
 
         if s.validate(user_response):
-            UserState(state=s, workflow_id=workflow_id, user_id=user.get("id")).save()
+            UserState(state=s, pre_state_id=state_id, workflow_id=workflow_id, user_id=user.get("id")).save()
             populate_state(s)
             next_state = s
             break

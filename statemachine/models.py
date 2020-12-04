@@ -56,6 +56,7 @@ class UserState(models.Model):
     user_id = models.PositiveIntegerField()
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     workflow_id = models.PositiveIntegerField()
+    pre_state_id = models.PositiveIntegerField(null=True, blank=True)
 
 
 class UserStateMapping(models.Model):

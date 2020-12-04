@@ -1,22 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="ui form">
+<div class="ui form" xmlns="http://www.w3.org/1999/html">
     <div class="container mt-4">
         <div class="col-lg-6  col-md-8 mx-auto ui segment p-4">
- <h1>Question Page</h1>
-    <form action="submit" method="POST">
-        <input type="hidden" name="state_id" value={{state.id}}>
-        {% for q in state.question_set %}
-           <h2> <label>{{q.question_text}}</label></h2>
-            <ul>
-            {% for o in q.option_set %}
-               <h3> <input name="response" type="radio" value={{o.value}}> &nbsp; {{o.value}}</input></h3>
-            {% endfor %}
-            </ul>
-            <input type="submit" class="btn btn-primary" />
-        {% endfor %}
-    </form>
+            <h1>Question Page</h1>
+            <form action="/office/{{state.workflow.id}}/submit" method="POST">
+                <input type="hidden" name="state_id" value={{state.id}}>
+                {% for q in state.question_set %}
+                <h2><label>{{q.question_text}}</label></h2>
+                <ul>
+                    {% for o in q.option_set %}
+                    <h3><input name="response" type="radio" value={{o.value}}> &nbsp; {{o.value}}</input></h3>
+                    {% endfor %}
+                </ul>
+
+                <input type="submit" class="btn btn-primary"/>
+                {% endfor %}
+
+                <button type="submit"> <a  href="/state/{{state.id}}/previous/"><h2>Prvios</h2></a></button>
+            </form>
         </div>
     </div>
 </div>

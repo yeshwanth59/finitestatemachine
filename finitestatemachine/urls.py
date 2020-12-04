@@ -33,6 +33,7 @@ urlpatterns = [
     path("office/", views.office),
     path("office/<int:workflow_id>/start", login_required(views.workflow_start)),
     path("office/<int:workflow_id>/submit", login_required(views.workflow_submit)),
+    path("state/<int:state_id>/previous/", views.previous),
     path("", views.home),
 
 
