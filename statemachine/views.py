@@ -115,27 +115,31 @@ def previous(request, state_id):
     user_state_obj = UserState.objects.filter(state_id=state_id).filter(user_id=user.get("id")).first()
     pre_state_id = user_state_obj.pre_state_id
     state = State.objects.filter(id=pre_state_id).first()
+    option_id = user_state_obj.option_id
+    print(option_id)
+
 
     populate_state(state)
 
-    return render(request, "questions.html", {"state": state})
-
+    return render(request, "questions.html", {"state": state, "option_id": option_id})
 
 
 def workflow_submit(request, workflow_id):
     user = request.session.get("user")
     print(request.POST)
-    user_response = request.POST.get('response')
+    option_id = request.POST.get('response')
     state_id = request.POST.get('state_id')
     state = State.objects.filter(id=state_id).first()
     next_state = None
-    print(user_response)
+    # print(user_response)
     print(state.next_states.all())
+    response = Option.objects.filter(id=option_id).first().value
     for s in state.next_states.all():
 
-        if s.validate(user_response):
-            UserState(state=s, pre_state_id=state_id, workflow_id=workflow_id, user_id=user.get("id")).save()
+        if s.validate(response):
+            UserState(state=s, pre_state_id=state_id, workflow_id=workflow_id, user_id=user.get("id"), option_id=option_id).save()
             populate_state(s)
             next_state = s
             break
+
     return render(request, "questions.html", {"state": next_state})

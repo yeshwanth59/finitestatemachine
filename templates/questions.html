@@ -11,14 +11,22 @@
                 <h2><label>{{q.question_text}}</label></h2>
                 <ul>
                     {% for o in q.option_set %}
-                    <h3><input name="response" type="radio" value={{o.value}}> &nbsp; {{o.value}}</input></h3>
+                    {% if option_id and o.id == option_id %}
+                        <h3><input name="response" type="radio" value={{o.id}} checked> &nbsp; {{o.value}}</input></h3>
+                    {% else %}
+                        <h3><input name="response" type="radio" value={{o.id}}> &nbsp; {{o.value}}</input></h3>
+                    {% endif %}
                     {% endfor %}
                 </ul>
 
-                <input type="submit" class="btn btn-primary"/>
+                <input type="submit" class="btn btn-primary" value="Submit"/>
                 {% endfor %}
 
-                <button type="submit"> <a  href="/state/{{state.id}}/previous/"><h2>Prvios</h2></a></button>
+                {% if not state.initial_state %}
+                <button type="submit" class="btn btn-danger"><a href="/state/{{state.id}}/previous/"
+                                                                style="color:white">Previous</a></button>
+                {% endif %}
+
             </form>
         </div>
     </div>

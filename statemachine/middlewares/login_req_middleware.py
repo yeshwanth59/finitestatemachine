@@ -22,6 +22,7 @@ def login_required(get_response):
                 response = get_response(request)
             return response
             print(response)
+
         else:
             print("please Login")
             url = request.path
