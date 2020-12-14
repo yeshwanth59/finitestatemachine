@@ -22,10 +22,14 @@
                 <input type="submit" class="btn btn-primary" value="Submit"/>
                 {% endfor %}
 
-                {% if not state.initial_state %}
+                {% if state and not state.initial_state %}
+
                 <button type="submit" class="btn btn-danger"><a href="/state/{{state.id}}/previous/"
                                                                 style="color:white">Previous</a></button>
+
                 {% endif %}
+
+
 
             </form>
         </div>

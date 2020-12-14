@@ -15,6 +15,7 @@ class State(models.Model):
     initial_state = models.BooleanField(default=False)
     workflow = models.ForeignKey(Workflow, on_delete=models.CASCADE)
     next_states = models.ManyToManyField('self', through='StateNextStates', symmetrical=False)
+    terminal_state = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

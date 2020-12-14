@@ -45,16 +45,17 @@ class Login(View):
             pw = MyLoginForm.cleaned_data["pwd"]
             print(un)
             print(pw)
-            user = User.objects.get(email=un)
+            user = User.objects.get(email=un, pwd=pw)
             dbuser = User.objects.filter(email=un, pwd=pw)
-            if pw:
-                temp = {}
-                temp['name'] = user.name
-                temp['id'] = user.id
-                request.session['user'] = temp
-                print(user.__dict__)
-                if Login.return_url:
-                    return HttpResponseRedirect(Login.return_url)
+
+            temp = {}
+            temp['name'] = user.name
+            temp['id'] = user.id
+            request.session['user'] = temp
+            print(user.__dict__)
+            if Login.return_url:
+                return HttpResponseRedirect(Login.return_url)
+            else:
                 return redirect("/signup")
 
             if not dbuser:
@@ -95,9 +96,10 @@ def workflow_start(request, workflow_id):
         print(state)
     else:
         state = State.objects.filter(workflow_id=workflow_id).filter(initial_state=True).first()
-        UserState(state=state, workflow_id=workflow_id,user_id=user.get("id")).save()
+        UserState(state=state, workflow_id=workflow_id, user_id=user.get("id")).save()
 
     populate_state(state)
+
 
     return render(request, "questions.html", {"state": state})
 
@@ -130,10 +132,12 @@ def workflow_submit(request, workflow_id):
     option_id = request.POST.get('response')
     state_id = request.POST.get('state_id')
     state = State.objects.filter(id=state_id).first()
+    print(state)
     next_state = None
     # print(user_response)
     print(state.next_states.all())
     response = Option.objects.filter(id=option_id).first().value
+    print(response)
     for s in state.next_states.all():
 
         if s.validate(response):
@@ -143,3 +147,18 @@ def workflow_submit(request, workflow_id):
             break
 
     return render(request, "questions.html", {"state": next_state})
+
+
+def review(request):
+    # workflow ->state_id_resp->state& option
+    wrkflw = UserState.objects.all()
+    print(wrkflw)
+
+
+    # state = UserState.state.filter
+
+    return render(request, "review.html", {"wrkflw": wrkflw})
+
+
+
+
