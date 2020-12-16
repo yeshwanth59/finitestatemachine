@@ -1,29 +1,39 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-<div class="ui form">
+<div class="ui form" xmlns="http://www.w3.org/1999/html">
     <div class="container mt-4">
         <div class="col-lg-6  col-md-8 mx-auto ui segment p-4">
-            <h1 class="display-6" align="center" style="color:teal;"> Review </h1>
-            <br>
-            <form class="ui form" method="post">
-                <table border="5" align="center">
-                    <thead>
-                   <tr>
-                       <th>wrkfl</th>
-                   </tr>
-                    </thead>
-                    {% for wrkflw in wrkflw %}
-                    <tbody>
-                    <tr>
-                        <td> {{ wrkflw.workflow_id }}</td>
-                    </tr>
-                    </tbody>
-                    {% endfor %}
+            <h1>Review Page</h1>
+            <table border="5">
+                <thead>
+                <tr>
+                    <th>User name</th>
+                    <th> Question</th>
+                    <th>User Question</th>
+                    <th> User Response</th>
 
-                </table>
-                <button type="submit" class="btn btn-primary">Submit</button>
+
+                </tr>
+                </thead>
+                {% if user %}
+
+                {% for q in question %}
+                {% for res in response %}
+
+                <tbody>
+                <tr>
+                    <td>{{user.name}}</td>
+                    <td>{{q.question_text}}</td>
+                    <td>{{res.state}}</td>
+                    <td>{{res.option_id}}</td>
+                </tr>
+                </tbody>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+                {% endif %}
+            </table>
             </form>
         </div>
     </div>

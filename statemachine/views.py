@@ -132,7 +132,8 @@ def workflow_submit(request, workflow_id):
     option_id = request.POST.get('response')
     state_id = request.POST.get('state_id')
     state = State.objects.filter(id=state_id).first()
-    print(state)
+    s1 = state.questions.get(id=state_id)
+    print(s1.question_text)
     next_state = None
     # print(user_response)
     print(state.next_states.all())
@@ -149,15 +150,19 @@ def workflow_submit(request, workflow_id):
     return render(request, "questions.html", {"state": next_state})
 
 
-def review(request):
-    # workflow ->state_id_resp->state& option
-    wrkflw = UserState.objects.all()
-    print(wrkflw)
+def review(request, workflow_id):
+    user = request.session.get("user")
+    user_states = UserState.objects.filter(user_id=user.get("id")).filter(workflow_id=workflow_id).order_by('id').all()
+    for us in user_states:
+        question = us.state.questions.get(id=us.state.id)
+        print(question)
+        option = question.options.get(id=us.option_id)
+        print(option)
 
 
-    # state = UserState.state.filter
 
-    return render(request, "review.html", {"wrkflw": wrkflw})
+    return render(request, "review.html", {"question": question})
+
 
 
 
