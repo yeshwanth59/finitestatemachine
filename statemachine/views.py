@@ -1,3 +1,4 @@
+from django.db.models.options import Options
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.http import HttpResponse
 from django.views import View
@@ -114,12 +115,12 @@ def populate_state(state):
 
 def previous(request, state_id):
     user = request.session.get("user")
-    user_state_obj = UserState.objects.filter(state_id=state_id).filter(user_id=user.get("id")).first()
+    user_state_obj = UserState.objects.filter(state_id=state_id).filter(user_id=user.get("id")).order_by("-id").first()
     pre_state_id = user_state_obj.pre_state_id
+    user_state_obj = UserState.objects.filter(state_id=pre_state_id).filter(user_id=user.get("id")).order_by("-id").first()
     state = State.objects.filter(id=pre_state_id).first()
     option_id = user_state_obj.option_id
     print(option_id)
-
 
     populate_state(state)
 
@@ -131,18 +132,23 @@ def workflow_submit(request, workflow_id):
     print(request.POST)
     option_id = request.POST.get('response')
     state_id = request.POST.get('state_id')
-    state = State.objects.filter(id=state_id).first()
-    s1 = state.questions.get(id=state_id)
-    print(s1.question_text)
+
+    current_state = State.objects.filter(id=state_id).first()
+    user_state = UserState.objects.filter(state_id=current_state.id).filter(user_id=user.get('id')).order_by("-id").first()
+    user_state.option_id = option_id
+    user_state.save()
+
     next_state = None
-    # print(user_response)
-    print(state.next_states.all())
+
     response = Option.objects.filter(id=option_id).first().value
     print(response)
-    for s in state.next_states.all():
+
+    for s in current_state.next_states.all():
+        print(s.name)
 
         if s.validate(response):
-            UserState(state=s, pre_state_id=state_id, workflow_id=workflow_id, user_id=user.get("id"), option_id=option_id).save()
+            print("validate"+s.name)
+            UserState(state=s, pre_state_id=state_id, workflow_id=workflow_id, user_id=user.get("id")).save()
             populate_state(s)
             next_state = s
             break
@@ -153,16 +159,32 @@ def workflow_submit(request, workflow_id):
 def review(request, workflow_id):
     user = request.session.get("user")
     user_states = UserState.objects.filter(user_id=user.get("id")).filter(workflow_id=workflow_id).order_by('id').all()
+    final_list = list()
     for us in user_states:
-        question = us.state.questions.get(id=us.state.id)
-        print(question)
-        option = question.options.get(id=us.option_id)
-        print(option)
+        state = us.state
+        if us.option_id:
+            question = Question.objects.get(state_id=us.state.id)
+            option = Option.objects.get(id=us.option_id)
+            setattr(us, 'question_text', question.question_text)
+            setattr(us, 'answer', option.value)
+            final_list.append(us)
+    return render(request, "review.html", {"responses": final_list, "state": state})
 
 
+def doctor(request, workflow_id):
+    user = request.session.get("user")
+    user_states = UserState.objects.filter(user_id=user.get("id")).filter(workflow_id=workflow_id).order_by('id').all()
+    final_list = list()
+    for us in user_states:
+        state = us.state
+        if us.option_id:
+            question = Question.objects.get(state_id=us.state.id)
+            option = Option.objects.get(id=us.option_id)
+            setattr(us, 'question_text', question.question_text)
+            setattr(us, 'answer', option.value)
+            final_list.append(us)
 
-    return render(request, "review.html", {"question": question})
-
+    return render(request, "doctor.html", {"user": user, "responses": final_list, "state": state})
 
 
 

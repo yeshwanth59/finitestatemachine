@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ui form" xmlns="http://www.w3.org/1999/html">
+    <div class="container mt-4">
+        <div class="col-lg-6  col-md-8 mx-auto ui segment p-4">
+            <h1>Doctor's Review On Patient Condition </h1>
+            <form action="/doctor/">
+                {% if user %}
+                <h3 style="color:tomato">Patient Name: &nbsp;&nbsp;{{user.name}}</h3>
+                {% if state %}
+                <h3 style="color:teal">Patient's Issue: &nbsp;&nbsp;{{state.workflow}}</h3>
+                     <br>
+                {% endif %}
+
+                <table border="5">
+                    <thead>
+                    <tr>
+                        <th style="font-size:18px; color:blue;"> Question</th>
+                        <th style="font-size:18px; color:blue;"> User Response</th>
+                    </tr>
+                    </thead>
+                    {% for res in responses %}
+                    <tbody>
+                    <tr>
+                        <td style="font-size:18px; color:black;">{{res.question_text}}</td>
+                        <td style="font-size:18px; color:maroon;">{{res.answer}}</td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                    {% endif %}
+
+                </table>
+                <br>
+                <br>
+                <button class="btn btn-warning">use this medication</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-danger">Need following test reports</a></button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

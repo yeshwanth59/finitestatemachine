@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from statemachine.enums import QuestionType
+
 
 class Workflow(models.Model):
     name = models.CharField(max_length=32)
@@ -23,7 +25,9 @@ class State(models.Model):
     def validate(self, user_response):
         print(user_response)
         print(self.condition)
-        return self.condition.lower() == user_response.lower()
+        if self.condition:
+            return self.condition.lower() == user_response.lower()
+        return True
 
 
 class StateNextStates(models.Model):
@@ -37,6 +41,7 @@ class StateNextStates(models.Model):
 
 
 class Question(models.Model):
+    question_type = models.IntegerField(choices=QuestionType.choices(), db_column='type', default=int(QuestionType.radio))
     question_text = models.CharField(max_length=100)
     state = models.ForeignKey(State, on_delete=models.CASCADE, related_name='questions')
 
@@ -64,5 +69,4 @@ class UserState(models.Model):
 class UserStateMapping(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
 

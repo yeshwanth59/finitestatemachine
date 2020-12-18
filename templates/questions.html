@@ -9,6 +9,7 @@
                 <input type="hidden" name="state_id" value={{state.id}}>
                 {% for q in state.question_set %}
                 <h2><label>{{q.question_text}}</label></h2>
+                {% if q.question_type == 1 %}
                 <ul>
                     {% for o in q.option_set %}
                     {% if option_id and o.id == option_id %}
@@ -18,22 +19,19 @@
                     {% endif %}
                     {% endfor %}
                 </ul>
-
-                <input type="submit" class="btn btn-primary" value="Submit"/>
-                {% endfor %}
-
                 {% if state and not state.initial_state %}
-
-                <button type="submit" class="btn btn-danger"><a href="/state/{{state.id}}/previous/"
-                                                                style="color:white">Previous</a></button>
-
+                <button class="btn btn-warning"><a href="/state/{{state.id}}/previous/" style="color:black">Previous</a></button>
                 {% endif %}
-
-
-
+                &nbsp;&nbsp;
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+                {%else %}
+                    {% for o in q.option_set %}
+                        <button class="btn btn-primary"><a href="/office/{{state.workflow.id}}/review" style="color:black;">{{o.value}}</a></button>
+                    {% endfor %}
+                {%endif %}
+                {% endfor %}
             </form>
         </div>
     </div>
 </div>
 {% endblock %}
-

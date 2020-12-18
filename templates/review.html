@@ -5,35 +5,30 @@
     <div class="container mt-4">
         <div class="col-lg-6  col-md-8 mx-auto ui segment p-4">
             <h1>Review Page</h1>
-            <table border="5">
-                <thead>
-                <tr>
-                    <th>User name</th>
-                    <th> Question</th>
-                    <th>User Question</th>
-                    <th> User Response</th>
+            <form>
+                <table border="5">
+                    <thead>
+                    <tr>
+                        <th> <h3 style="color:brown;">Question</h3></th>
+                        <th> <h3 style="color:brown;">User Response</h3></th>
 
-
-                </tr>
-                </thead>
-                {% if user %}
-
-                {% for q in question %}
-                {% for res in response %}
-
-                <tbody>
-                <tr>
-                    <td>{{user.name}}</td>
-                    <td>{{q.question_text}}</td>
-                    <td>{{res.state}}</td>
-                    <td>{{res.option_id}}</td>
-                </tr>
-                </tbody>
-                {% endif %}
-                {% endfor %}
-                {% endfor %}
-                {% endif %}
-            </table>
+                    </tr>
+                    </thead>
+                    {% if state %}
+                    {% for res in responses %}
+                    <tbody>
+                    <tr>
+                        <td><h3>{{res.question_text}}</h3></td>
+                        <td><h3 style="color:brown;">{{res.answer}}</h3></td>
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                    {% endif %}
+                </table>
+                <br>
+                <br>
+                <button class="btn btn-primary"><a href="/office/{{state.workflow.id}}/doctor" style="color:black"><h3>Submit to doctor</h3></a>
+                </button>
             </form>
         </div>
     </div>

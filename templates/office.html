@@ -1,13 +1,30 @@
 {% extends "base.html" %}
 
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static '/css/label.css' %}">
+<div class="ui form" xmlns="http://www.w3.org/1999/html">
+    <div class="container mt-4">
+        <div class="col-lg-6  col-md-8 mx-auto ui segment p-4">
+            <ul>
 
-<ul>
-    {% block content %}
-    {% if workflow %}
-    {% for wrkfl in workflow %}
-    <h1><li> <a  style="color:teal;" href="{{ wrkfl.id }}/start"> {{ wrkfl }} </a> -->
-        <a  style="color:blue;" href="{{ wrkfl.id }}/review" > review </a>  </li></h1>
-    {% endfor %}
-    {% endif %}
-    {% endblock %}
-</ul>
+                {% if workflow %}
+                {% for wrkfl in workflow %}
+                <h2>
+
+                        <button class="btn btn-danger"><a style="color:white;" href="{{ wrkfl.id }}/review"> review </a>
+                        </button>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <label>
+                    <a style="color:teal;" href="{{ wrkfl.id }}/start"> {{ wrkfl }} </a>
+                        </label>
+                </h2>
+                {% endfor %}
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
