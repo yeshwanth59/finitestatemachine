@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="ui form">
+    <div class="container mt-4">
+        <div class="col-lg-6  col-md-8 mx-auto ui segment p-4">
+            <h1 class="display-6" align="center" style="color:teal;"> Profile </h1>
+            <br>
+            <form class="ui form" method="post">
+                <ul>
+
+                    {% if user %}
+                   <h3>name:<input type="text" value="{{user.name}}" style="color:brown" readonly></h3>
+                   <h3>mobile:<input type="text" value="{{user.mobileNo}}" style="color:brown" readonly></h3>
+                   <h3>email:<input type="text" value="{{user.email}}" style="color:brown" readonly></h3>
+                    <h3>password:<input type="text" value="{{user.pwd}}" style="color:brown" readonly></h3>
+                    <h3>address:<input type="text" value="{{user.address}}" style="color:brown" readonly></h3>
+                    <h3>Image:<input type="text" value="{{user.image}}" style="color:brown" readonly></h3>
+                    {% endif %}
+                </ul>
+                <br>
+                <br>
+                <button type="submit" class="btn btn-primary"><a href="profile_update/" style="color:white;">Update Profile</a> </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

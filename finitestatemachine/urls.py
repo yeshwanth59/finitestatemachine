@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^_nested_admin/', include('nested_admin.urls')),
     path("signup/", cantLoginAfterLogin(views.signup)),
     path("login/", cantLoginAfterLogin(Login.as_view())),
+    path("profile/", login_required(views.profile)),
+    path("profile/profile_update/", login_required(views.profile_update)),
     path("logout/", views.logout),
     path("office/", views.office),
     path("office/<int:workflow_id>/start", login_required(views.workflow_start)),

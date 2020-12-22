@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.http import HttpResponse
 from django.views import View
 from statemachine.models import User, Workflow, State, Question, Option, UserState
-from statemachine.forms import SignupForm, LoginForm
+from statemachine.forms import SignupForm, LoginForm, ProfileForm
 from os import path
 import json
 
@@ -32,6 +32,29 @@ def signup(request):
     return render(request, "signup.html", {"form": form})
 
 
+def profile(request):
+    user = User.objects.all().first()
+    return render(request, "profile.html", {"user": user})
+
+
+def profile_update(request):
+    user = User.objects.all().first()
+    if request.method == "POST":
+        name = request.POST['name']
+        mobileNo = request.POST['mobileNo']
+        email = request.POST['email']
+        pwd = request.POST['pwd']
+        address = request.POST['address']
+        user.name = name
+        user.mobileNo = mobileNo
+        user.email = email
+        user.pwd = pwd
+        user.address = address
+        user.save()
+        return redirect("/")
+    return render(request, "profile_update.html", {"user": user})
+
+
 class Login(View):
     return_url = None
 
@@ -52,6 +75,9 @@ class Login(View):
             temp = {}
             temp['name'] = user.name
             temp['id'] = user.id
+            temp['mobileNo'] = user.mobileNo
+            temp['email'] = user.email
+            temp['pwd'] = user.pwd
             request.session['user'] = temp
             print(user.__dict__)
             if Login.return_url:
@@ -168,7 +194,12 @@ def review(request, workflow_id):
             setattr(us, 'question_text', question.question_text)
             setattr(us, 'answer', option.value)
             final_list.append(us)
-    return render(request, "review.html", {"responses": final_list, "state": state})
+    try:
+        return render(request, "review.html", {"responses": final_list, "state": state})
+    except:
+        return HttpResponse("""<html><body><h3 style="color:red;" align="center">"no review available"</h3></body>
+            </html>""")
+
 
 
 def doctor(request, workflow_id):

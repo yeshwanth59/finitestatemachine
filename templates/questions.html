@@ -26,7 +26,7 @@
                 <input type="submit" class="btn btn-primary" value="Submit"/>
                 {%else %}
                     {% for o in q.option_set %}
-                        <button class="btn btn-primary"><a href="/office/{{state.workflow.id}}/review" style="color:black;">{{o.value}}</a></button>
+                      <h3><a href="/office/{{state.workflow.id}}/review" style="color:black;">{{o.value}}</a></h3>
                     {% endfor %}
                 {%endif %}
                 {% endfor %}

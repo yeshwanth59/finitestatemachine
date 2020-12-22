@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="ui form">
+    <div class="container mt-4">
+        <div class="col-lg-6  col-md-8 mx-auto ui segment p-4">
+            <h1 class="display-6" align="center" style="color:teal;"> Profile Update</h1>
+            <br>
+            <form class="ui form" method="post">
+                {% csrf_token %}
+                <h3>Name : <input type="text" value="{{user.name}}" name="name" style="color:red" readonly></h3>
+                <h3>mobile No : <input type="text" value="{{user.mobileNo}}" name="mobileNo" style="color:red"></h3>
+                <h3>email : <input type="text" value="{{user.email}}" name="email" style="color:red"></h3>
+                <h3>pwd: <input type="text" value="{{user.pwd}}" name="pwd" style="color:red"></h3>
+                <h3>address: <input type="text" value="{{user.address}}" name="address" style="color:red"></h3>
+                 <button  type="submit" class="btn btn-primary">Profile up to dated</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

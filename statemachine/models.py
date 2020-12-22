@@ -56,6 +56,8 @@ class User(models.Model):
     mobileNo = models.CharField(max_length=10)
     email = models.EmailField(max_length=20)
     pwd = models.CharField(max_length=10)
+    image = models.ImageField(upload_to='upload/images', blank=True)
+    address = models.CharField(max_length=100)
 
 
 class UserState(models.Model):
@@ -69,4 +71,7 @@ class UserState(models.Model):
 class UserStateMapping(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+
 
